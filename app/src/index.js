@@ -58,7 +58,10 @@ const App = {
 try{
     await splitCoin(this.bobAcc, this.carolAcc).send({ from: this.aliceAcc, value:amount });
     await withdrawal().send({ from: this.bobAcc }); 
-    await withdrawal().send({ from: this.carolAcc }); 
+    await withdrawal().send({ from: this.carolAcc });
+  
+    //sender should withdraw the remainder if the amount is not even
+    if (amount%2 > 0) await withdrawal().send({ from: this.aliceAcc });
     this.setStatus("Transaction complete!");
     this.refreshBalance();
     }catch(error) {

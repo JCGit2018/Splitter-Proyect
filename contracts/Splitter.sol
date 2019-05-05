@@ -21,18 +21,22 @@ contract Splitter is Pausable (false)  {
         require(msg.value>0, "Amount must be greater than 0" );
         uint half = msg.value.div(2);
         uint remainder = msg.value.mod(2);
-        if(remainder >= 1) balances[msg.sender].add(remainder);
+        address owner= getOwner();
+        if(remainder >= 1){
+           balances[owner]= balances[owner].add(remainder);  
+        } 
         balances[bob] = balances[bob].add(half);
         balances[carol] = balances[carol].add(half);
         emit LogSplitCoin(msg.sender, msg.value, bob, carol);
     }
     
-    function withdrawal() public notPaused() {
+    function withdrawal() public notPaused() returns (bool success){
         uint amountToWithdraw = balances[msg.sender];
         require(amountToWithdraw > 0, "No funds");
         balances[msg.sender] = 0;
-        msg.sender.transfer(amountToWithdraw);
         emit LogWithdrawalSent(msg.sender, amountToWithdraw);
+        msg.sender.transfer(amountToWithdraw);
+        return true;
 
     }
 }
