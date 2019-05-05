@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Splitter Proyect B9Lab</title>
+  </head>
+  <style>
+    input {
+      display: block;
+      margin-bottom: 12px;
+    }
+  </style>
+  <body>
+    <h1>Splittter Proyect</h1>
+    <p>Alice has <strong class="balanceAlice">loading...</strong> META</p>
+    <p>Bob has <strong class="balanceBob">loading...</strong> META</p>
+    <p>Carol has <strong class="balanceCarol">loading...</strong> META</p>
+
+    <h1>Split MetaCoin From Alice To Bob and Carol</h1>
+
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" placeholder="e.g. 95" />
+
+ 
+
+    <button onclick="App.sendCoin()">Split MetaCoin</button>
+
+    <p id="status"></p>
+    <p>
+      <strong>Hint:</strong> open the browser developer console to view any
+      errors and warnings.
+    </p>
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -31,7 +31,8 @@ contract Splitter is Pausable (false)  {
         uint amountToWithdraw = balances[msg.sender];
         require(amountToWithdraw > 0, "No funds");
         balances[msg.sender] = 0;
-        emit LogWithdrawalSent(msg.sender, amountToWithdraw);
         msg.sender.transfer(amountToWithdraw);
+        emit LogWithdrawalSent(msg.sender, amountToWithdraw);
+
     }
 }
