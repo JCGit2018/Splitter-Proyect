@@ -11,4 +11,8 @@ contract Owner {
     constructor () public {
         owner = msg.sender;
     }
+    
+    function getOwner()  public view returns   (address myOwner) {
+        return owner;
+    } 
 }

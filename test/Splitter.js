@@ -2,8 +2,9 @@ const Splitter = artifacts.require("./Splitter.sol");
 
 contract("Splitter", accounts => {
 	const [ owner, recipient1, recipient2 ] = accounts;
+        let instance;
 
-	beforeEach("Deploy fresh, unpaused Splitter", async function () {
+       beforeEach("Deploy fresh, unpaused Splitter", async function () {
 		instance = await Splitter.new({ from: owner });
 	});
 
@@ -42,9 +43,9 @@ contract("Splitter", accounts => {
 		assert.strictEqual(txObject.logs[0].args.sender, accounts[0], 
 			"Failed to log address sent from correctly");
 		assert.strictEqual(txObject.logs[0].args.bob, accounts[1],
-		         "Failed to log address sent from correctly");
+		         "Failed to log address sent to correctly");
 		assert.strictEqual(txObject.logs[0].args.carol, accounts[2],
-			"Failed to log address sent from correctly");
+			"Failed to log address sent to correctly");
 	});
 
 	it("Should withdraw correctly", async function () {
