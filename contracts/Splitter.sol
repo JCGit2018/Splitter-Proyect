@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./SafeMath.sol";
 import "./Pausable.sol";
 
-contract Splitter is Pausable (false)  {
+contract Splitter is Pausable  {
     using SafeMath for uint;    
 
     mapping(address => uint) public balances;
