@@ -21,11 +21,10 @@ const App = {
         deployedNetwork.address,
       );
 
-    // this.contract=  this.splitter.deployed().then(this.splitter=> this.splitter.address)
-
-      this.contract= this.splitter.address; //contract address
-
-      // get accounts 
+ 
+      this.contract= deployedNetwork.address; //contract address
+      console.log(this.contract);
+      // get accounts
       const accounts = await web3.eth.getAccounts();
       this.aliceAcc = accounts[0];
       this.bobAcc = accounts[1];
@@ -40,11 +39,11 @@ const App = {
   refreshBalance: async function() {
     const { web3 } = this;
     let balanceElement;
- //   const balanceContract = await web3.eth.getBalance(this.contract);
- //   balanceElement = document.getElementsByClassName("balanceContract")[0];
- //   balanceElement.innerHTML = balanceContract;
+    const balanceContract = await web3.eth.getBalance(this.contract);
+    balanceElement = document.getElementsByClassName("balanceContract")[0];
+    balanceElement.innerHTML = balanceContract;
 
-    const balanceAlice = await web3.eth.getBalance(this.aliceAcc);
+    const balanceAlice = await web3.eth.getBalance(this.aliceAcc)
     balanceElement = document.getElementsByClassName("balanceAlice")[0];
     balanceElement.innerHTML = balanceAlice;
 
