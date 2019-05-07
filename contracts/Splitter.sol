@@ -22,9 +22,8 @@ contract Splitter is Pausable (false)  {
         uint half = msg.value.div(2);
         uint remainder = msg.value.mod(2);
         address owner= getOwner();
-        if(remainder >= 1){
-           balances[owner]= balances[owner].add(remainder);  
-        } 
+        balances[owner]= balances[owner].add(remainder);  
+        
         balances[bob] = balances[bob].add(half);
         balances[carol] = balances[carol].add(half);
         emit LogSplitCoin(msg.sender, msg.value, bob, carol);
@@ -39,4 +38,7 @@ contract Splitter is Pausable (false)  {
         return true;
 
     }
+
+
+
 }

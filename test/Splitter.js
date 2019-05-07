@@ -1,5 +1,15 @@
 const Splitter = artifacts.require("./Splitter.sol");
 
+
+web3.eth.expectedExceptionPromise   = require("../utils/expectedExceptionPromise.js");
+
+
+const { BN, sha3, toWei } = web3.utils;
+
+require('chai')
+    .use(require('chai-as-promised'))
+    .should();
+
 contract("Splitter", accounts => {
 	const [ owner, recipient1, recipient2 ] = accounts;
         let instance;
@@ -28,7 +38,7 @@ contract("Splitter", accounts => {
 	it("Should split odd deposit correctly", async function () {
 		const deposit = 7; 
                 await instance.splitCoin(recipient1, recipient2, { from: owner, value: deposit });
-                const remainder = deposit %2;// in this case, the remainder should stay in the owners balance
+                const remainder = deposit %2;// in this case, the remainder should stay in the owner balance
 		const postBalance1 = await instance.balances.call(recipient1);
 		const postBalance2 = await instance.balances.call(recipient2);
 		assert.strictEqual(postBalance1.toString(10), postBalance2.toString(10), "Failed to split odd deposit into equal halves");
@@ -49,7 +59,7 @@ contract("Splitter", accounts => {
 	});
 
 	it("Should withdraw correctly", async function () {
-		const deposit = 2; // Must be even number
+		const deposit = 3; 
 		await instance.splitCoin(recipient1, recipient2, { from: owner, value: deposit });
 		let postBalance1 = await instance.balances.call(recipient1);
 		console.log("Balance before withdrawl: " + postBalance1.toString(10));
@@ -58,7 +68,31 @@ contract("Splitter", accounts => {
 		console.log("Balance after withdrawl: " + postBalance1.toString(10));
 		assert.strictEqual(txObject.logs[0].args.amount.toString(10), "1",
 			"Failed to log withdrawl correctly");
+                assert.strictEqual(txObject.logs[0].args.receiver,recipient1,
+			"Failed to send withdrawl to the correct recipient");
 	});
+
+         it("Splitter should fail if amount is zero",  async function() {
+                 await web3.eth.expectedExceptionPromise(
+                      () => { return instance.splitCoin(recipient1, recipient2, { from: owner, value: 0 }); } );
+         });
+
+         it("Withdrawal should fail if no funds",  async function() {
+                  await web3.eth.expectedExceptionPromise(
+                      () => { return instance.withdrawal({ from: recipient2}); });
+          });
+
+         it("Withdrawal should fail if in pause",  async function() {
+		  const amount = 84;
+                  await instance.splitCoin(recipient1, recipient2, { from: owner, value: amount })
+                  .should.be.fulfilled;
+
+                  await instance.contractPaused(true)
+                  .should.be.fulfilled;
+
+                  await  instance.withdrawal({ from: recipient2})
+                   .should.Throw;
+          });
 
 
 });
