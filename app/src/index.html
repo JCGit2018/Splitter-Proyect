@@ -11,20 +11,24 @@
   </style>
   <body>
     <h1>Splittter Proyect</h1>
-    <p>Alice has <strong class="balanceAlice">loading...</strong> META</p>
-    <p>Bob has <strong class="balanceBob">loading...</strong> META</p>
-    <p>Carol has <strong class="balanceCarol">loading...</strong> META</p>
+    <button onclick="App.pauseResume()">Pause/Resume the Contract</button>
+    <h2 id="statusContract">Status:Contract Active</h2>
+ 
+    <p>Alice has <strong class="balanceAlice">loading...</strong> Wei</p>
+    <p>Bob has <strong class="balanceBob">loading...</strong> Wei</p>
+    <p>Carol has <strong class="balanceCarol">loading...</strong> Wei</p>
 
-    <p>Contract has <strong class="balanceContract">loading...</strong> META</p>
+    <p>Contract has <strong class="balanceContract">loading...</strong> Wei</p>
 
-    <h1>Split MetaCoin From Alice To Bob and Carol</h1>
+    <h1>Split  From Alice To Bob and Carol</h1>
 
-    <label for="amount">Amount:</label>
+    <label for="amount">Amount in Wei:</label>
     <input type="text" id="amount" placeholder="e.g. 95" />
 
  
 
-    <button onclick="App.sendCoin()">Split MetaCoin</button>
+    <button onclick="App.sendCoin()">Split </button>
+    <button onclick="App.withdrawCoin()">Withdraw </button>
 
     <p id="status"></p>
     <p>

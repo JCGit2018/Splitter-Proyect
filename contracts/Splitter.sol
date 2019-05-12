@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./SafeMath.sol";
 import "./Pausable.sol";
 
-contract Splitter is Pausable  {
+contract Splitter is Pausable {
     using SafeMath for uint;    
 
     mapping(address => uint) public balances;
@@ -13,12 +13,16 @@ contract Splitter is Pausable  {
 
     event LogSplitterCreated(address owner);
     constructor () public  {
+        
         emit LogSplitterCreated(msg.sender);
     }
     
     
-    function splitCoin(address bob, address carol) public payable notPaused(){
-        require(msg.value>0, "Amount must be greater than 0" );
+    function splitCoin(address bob, address carol) public payable notPaused{
+        require(msg.value>1, "Amount must be greater than 1" );
+    	require(bob!=address(0));
+    	require(carol!=address(0));
+		
         uint half = msg.value.div(2);
         uint remainder = msg.value.mod(2);
         address owner= getOwner();
@@ -39,6 +43,8 @@ contract Splitter is Pausable  {
 
     }
 
-
-
 }
+
+
+
+

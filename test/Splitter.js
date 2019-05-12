@@ -82,17 +82,65 @@ contract("Splitter", accounts => {
                       () => { return instance.withdrawal({ from: recipient2}); });
           });
 
+         it("is OK if pause/resume called by owner", async function() {
+                  await instance.contractPaused({ from: owner})
+                  .should.be.fulfilled;
+                  await instance.resume({ from: owner})
+                  .should.be.fulfilled;
+                });
+
+         it("should fail if Contract is not paused ", async function() {
+                  await web3.eth.expectedExceptionPromise(
+                      () => { return instance.resume({ from: owner}); },   );
+                });
+
          it("Withdrawal should fail if in pause",  async function() {
 		  const amount = 84;
                   await instance.splitCoin(recipient1, recipient2, { from: owner, value: amount })
                   .should.be.fulfilled;
 
-                  await instance.contractPaused(true)
+                  await instance.contractPaused({ from: owner})
                   .should.be.fulfilled;
 
-                  await  instance.withdrawal({ from: recipient2})
-                   .should.Throw;
+                  await web3.eth.expectedExceptionPromise(
+                      () => { return instance.withdrawal({ from: recipient2}); }, 
+                      );
           });
+ 
+         it("Split should fail if amount is zero",  async function() {
+                  await web3.eth.expectedExceptionPromise(
+                      () => { return instance.splitCoin(recipient1, recipient2, { from: owner, value: 0  }); },);
+         });
+         it("Split should fail if amount is 1",  async function() {
+                  await web3.eth.expectedExceptionPromise(
+                      () => { return instance.splitCoin(recipient1, recipient2, { from: owner, value: 1  }); },);
+         });
 
+         it("is OK if splitCoin is called after pause/resume",  async function() {
+                  await instance.contractPaused({ from: owner})
+                  .should.be.fulfilled;
+                  await instance.resume({ from: owner})
+                  .should.be.fulfilled;
+                  await instance.splitCoin(recipient1, recipient2, { from: owner, value: 10  })
+                  .should.be.fulfilled;
+                });
+         it("emit event if paused", async function() {
+                  let result = await instance.contractPaused({ from: owner})
+                  .should.be.fulfilled;
+                  assert.strictEqual(result.logs.length, 1);
+                  let logEvent = result.logs[0];
+
+                  assert.strictEqual(logEvent.event, "LogPaused", "LogPaused name is wrong");
+                  assert.strictEqual(logEvent.args.pausedBy,owner , "caller is wrong");
+                });
+
+        it("Pause should fail if called by any user", async function() {
+                  await instance.contractPaused({ from: owner})
+                  .should.be.fulfilled;
+
+                  await web3.eth.expectedExceptionPromise(
+                      () => { return instance.resume({ from: recipient1 }); }, 
+                      );
+                });
 
 });
